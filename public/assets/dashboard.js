@@ -11,9 +11,11 @@ window.switchTab = (tabId) => {
     document.getElementById('orders').style.display = tabId === 'orders' ? 'block' : 'none';
     document.getElementById('menu').style.display = tabId === 'menu' ? 'block' : 'none';
     document.getElementById('photos').style.display = tabId === 'photos' ? 'block' : 'none';
+    document.getElementById('messages').style.display = tabId === 'messages' ? 'block' : 'none';
 
     if (tabId === 'menu') loadMenu();
     if (tabId === 'photos') loadDashPhotos();
+    if (tabId === 'messages') loadMessages();
 };
 
 // --- Orders ---
@@ -38,12 +40,9 @@ function renderOrders() {
                  ${o.summary.split(', ').map(item => `<div class="font-medium text-slate-700 text-lg py-1 border-b border-dashed border-slate-100 last:border-0">${item}</div>`).join('')}
             </div>
             
-            <div class="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-xs">👤</span>
-                    <span class="font-bold text-slate-600">${o.guest_name || 'Guest'}</span>
-                </div>
-                ${o.guest_note ? `<div class="italic text-slate-400 pl-7">"${o.guest_note}"</div>` : ''}
+            <div class="text-sm text-slate-500 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-2">
+                 <span class="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-xs">🕒</span>
+                 Updated: ${o.updated_at ? o.updated_at.substring(11, 16) : 'Just now'}
             </div>
             
             <div class="grid grid-cols-1 gap-2">
@@ -59,6 +58,39 @@ function renderOrders() {
 window.updateStatus = (id, status) => {
     fetch('../api/orders.php', { method: 'PUT', body: JSON.stringify({ id, status }) }).then(() => loadOrders());
 };
+
+// --- Messages ---
+let allMessages = [];
+function loadMessages() {
+    fetch('../api/messages.php?t=' + Date.now()).then(res => res.json()).then(data => { allMessages = data; renderMessages(); });
+}
+
+function renderMessages() {
+    const list = document.getElementById('messagesList');
+    if (allMessages.length === 0) {
+        list.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 font-medium">No messages yet.</div>';
+        return;
+    }
+    list.innerHTML = allMessages.map(m => `
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-pink-100 flex flex-col relative overflow-hidden group hover:shadow-md transition">
+             <div class="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl text-pink-500 -mt-2 -mr-2">❞</div>
+             
+             <div class="flex items-center gap-3 mb-4">
+                 <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-bold border border-pink-200">
+                    ${m.guest_name.charAt(0).toUpperCase()}
+                 </div>
+                 <div>
+                     <h3 class="font-bold text-slate-800">${m.guest_name}</h3>
+                     <p class="text-xs text-slate-400 font-bold uppercase tracking-wide">${m.created_at || 'Just now'}</p>
+                 </div>
+             </div>
+             
+             <div class="text-slate-600 font-medium leading-relaxed italic relative z-10">
+                 "${m.message}"
+             </div>
+        </div>
+    `).join('');
+}
 
 // --- Menu ---
 function loadMenu() {
@@ -280,6 +312,7 @@ async function performDelete() {
 
 setInterval(() => {
     if (document.getElementById('orders').style.display !== 'none') loadOrders();
+    if (document.getElementById('messages').style.display !== 'none') loadMessages();
 }, 5000);
 
 loadOrders();

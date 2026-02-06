@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modalImg = document.getElementById('modalImg');
     const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDesc');
+    // const modalDesc = document.getElementById('modalDesc'); // Removed
     const modalCat = document.getElementById('modalCat');
     const modalQtyVal = document.getElementById('modalQtyVal');
     const addToCartBtn = document.getElementById('addToCartBtn');
@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- TAB SWITCHING ---
+    // --- TAB SWITCHING ---
     window.switchTab = (tab) => {
         window.scrollTo(0, 0);
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -143,7 +144,90 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (tab === 'photos') fetchPhotos();
+        if (tab === 'messages') {
+            setTimeout(fetchGuestMessages, 50);
+        }
     };
+
+    // Polling for messages
+    setInterval(() => {
+        const msgTab = document.getElementById('tab-messages');
+        if (msgTab && !msgTab.classList.contains('hidden')) {
+            fetchGuestMessages();
+        }
+    }, 3000);
+
+    // --- MESSAGES LOGIC ---
+    const messageForm = document.getElementById('messageForm');
+    const guestMessagesList = document.getElementById('guestMessagesList');
+    let lastMessageCount = 0;
+
+    if (messageForm) {
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('chatName');
+            const msgInput = document.getElementById('chatInput');
+
+            // Validate Name
+            if (!nameInput.value.trim()) {
+                showAlert("Please enter your name.", "Name Required");
+                nameInput.focus();
+                return;
+            }
+
+            // Validate Message
+            if (!msgInput.value.trim()) {
+                msgInput.focus();
+                return;
+            }
+
+            // Save Name
+            localStorage.setItem('wedding_guest_name', nameInput.value.trim());
+            let chatterName = nameInput.value.trim(); // Assuming chatterName is defined or will be used locally
+
+            const btn = document.getElementById('sendMessageBtn');
+            const originalContent = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.textContent = "Sending...";
+
+            const formData = new FormData(messageForm);
+            const data = Object.fromEntries(formData.entries());
+
+            if (!data.message.trim()) { // This check might be redundant due to msgInput validation above
+                showAlert("Please write a message first.", "Empty Message");
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+                return;
+            }
+
+            try {
+                const res = await fetch('../api/messages.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    msgInput.value = ''; // Clear message only
+                    fetchGuestMessages(); // Refresh immediately
+                    if (window.confetti) {
+                        // Smaller burst for chat
+                        confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 }, colors: ['#FFC0CB', '#FF69B4'] });
+                    }
+                } else {
+                    showAlert("Failed to send message.", "Error");
+                }
+            } catch (err) {
+                showAlert("Network error.", "Error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+                msgInput.focus();
+            }
+        });
+    }
 
     // --- PHOTO LOGIC ---
     const photoInput = document.getElementById('photoUpload');
@@ -166,6 +250,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (e) { showAlert("Error uploading.", "Error"); }
         });
+    }
+
+    async function fetchGuestMessages() {
+        if (!guestMessagesList || guestMessagesList.closest('.hidden')) return;
+
+        try {
+            const res = await fetch('../api/messages.php?t=' + Date.now());
+            const msgs = await res.json();
+
+            // API returns Newest First (ORDER BY created_at DESC)
+            // We want Oldest First for chat (Top to Bottom)
+            const chatMsgs = msgs.slice().reverse();
+
+            if (chatMsgs.length === 0) {
+                guestMessagesList.innerHTML = '<div class="text-center text-gray-400 text-sm py-10">No messages yet. Start the conversation!</div>';
+                lastMessageCount = 0;
+                return;
+            }
+
+            // Only re-render if count changed to avoid jumpiness (basic check)
+            if (chatMsgs.length !== lastMessageCount) {
+                const myName = localStorage.getItem('wedding_guest_name');
+
+                guestMessagesList.innerHTML = chatMsgs.map(m => {
+                    const isMe = myName && m.guest_name === myName;
+                    return `
+                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                            <span class="text-[10px] text-gray-400 px-2 mb-1">${m.guest_name}</span>
+                            <div class="max-w-[80%] rounded-2xl px-4 py-3 shadow-sm text-sm ${isMe ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none'}">
+                                ${m.message}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Scroll to bottom
+                setTimeout(() => {
+                    guestMessagesList.scrollTop = guestMessagesList.scrollHeight;
+                }, 10);
+                lastMessageCount = chatMsgs.length;
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     async function fetchPhotos() {
@@ -313,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalImg.src = selectedDrink.image_url ? '../public/' + selectedDrink.image_url : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop';
         modalTitle.textContent = selectedDrink.name;
-        modalDesc.textContent = selectedDrink.description || 'No description available.';
+        // modalDesc removed as per request
         if (modalCat) modalCat.textContent = selectedDrink.category.toUpperCase();
 
         const existing = cart.find(i => i.id === id);

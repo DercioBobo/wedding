@@ -45,3 +45,10 @@ INSERT IGNORE INTO `drinks` (`name`, `description`, `category`, `image_url`, `is
 ('Whiskey Sour', 'Classic whiskey drink', 'Cocktail', 'uploads/whiskey.jpg', 1),
 ('Coca Cola', 'Chilled soda', 'Soft Drink', 'uploads/coke.jpg', 1),
 ('Water', 'Still water with ice', 'Soft Drink', 'uploads/water.jpg', 1);
+
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `guest_name` VARCHAR(100),
+  `message` TEXT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -21,14 +21,22 @@
         <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Bar Dashboard</h1>
         <div class="flex gap-2">
             <button onclick="switchTab('orders')" class="nav-btn px-5 py-2 rounded-full font-bold text-sm transition shadow-sm" data-target="orders">Orders</button>
+            <button onclick="switchTab('messages')" class="nav-btn px-5 py-2 rounded-full font-bold text-sm transition shadow-sm" data-target="messages">Messages</button>
             <button onclick="switchTab('menu')" class="nav-btn px-5 py-2 rounded-full font-bold text-sm transition shadow-sm" data-target="menu">Menu</button>
             <button onclick="switchTab('photos')" class="nav-btn px-5 py-2 rounded-full font-bold text-sm transition shadow-sm" data-target="photos">Photos</button>
         </div>
     </div>
 
-    <!-- Orders Tab -->
     <div id="orders" class="p-4 md:p-8 flex-1">
         <div id="ordersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Loaded -->
+        </div>
+    </div>
+
+    <!-- Messages Tab -->
+    <div id="messages" class="hidden p-4 md:p-8 max-w-6xl mx-auto w-full">
+        <h2 class="text-2xl font-bold mb-6 text-slate-800">Guest Messages</h2>
+        <div id="messagesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Loaded -->
         </div>
     </div>

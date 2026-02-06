@@ -156,16 +156,45 @@
         <img id="previewImage" src="" class="max-w-full max-h-full rounded-lg shadow-2xl">
     </div>
 
+    <!-- MESSAGES TAB -->
+    <!-- MESSAGES TAB -->
+    <div id="tab-messages" class="tab-content hidden h-[100dvh] fixed inset-0 z-40 bg-gray-50 flex flex-col pb-[90px]">
+        <div class="flex-none pt-6 px-5 pb-2">
+            <!-- Header removed, optional spacing -->
+        </div>
+        
+        <!-- Chat Container (Scrollable) -->
+        <div id="guestMessagesList" class="flex-1 overflow-y-auto w-full max-w-md mx-auto px-5 space-y-4 pt-2 pb-4">
+             <div class="text-center text-gray-400 text-sm py-10">Loading chat...</div>
+        </div>
+
+        <!-- Input Area (Fixed at bottom of flex container) -->
+        <div class="flex-none px-5 w-full max-w-md mx-auto">
+            <div class="glass-card rounded-[24px] p-2 shadow-xl border border-white/60">
+                <form id="messageForm" class="flex flex-col gap-2 p-1">
+                    <input type="text" name="guest_name" id="chatName" placeholder="Your Name" class="w-full px-4 py-2 bg-white/50 rounded-xl border border-white/50 outline-none focus:ring-2 focus:ring-pink-400/30 transition text-sm font-bold text-gray-700 placeholder-gray-400">
+                    <div class="flex gap-2">
+                        <input type="text" name="message" id="chatInput" placeholder="Type a message..." class="flex-1 pl-4 py-3 bg-white/50 rounded-2xl border border-white/50 outline-none focus:ring-2 focus:ring-pink-400/30 transition font-medium text-gray-800 placeholder-gray-400" autocomplete="off">
+                        <button type="submit" id="sendMessageBtn" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold shadow-lg shadow-pink-200 active:scale-95 transition-transform disabled:opacity-50">
+                            <svg class="w-5 h-5 translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- BOTTOM TAB BAR -->
     <div class="fixed bottom-6 left-5 right-5 z-[60]">
         <div class="glass-panel mx-auto max-w-sm rounded-[32px] p-2 flex justify-between shadow-2xl border border-white/60">
-            <button onclick="switchTab('drinks')" class="tab-btn w-1/2 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-white bg-blue-600 shadow-lg" data-target="drinks">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                <span>Drinks</span>
+            <button onclick="switchTab('drinks')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-white bg-blue-600 shadow-lg" data-target="drinks">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </button>
-            <button onclick="switchTab('photos')" class="tab-btn w-1/2 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-gray-500 hover:bg-white/40" data-target="photos">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span>Photos</span>
+            <button onclick="switchTab('photos')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-gray-500 hover:bg-white/40" data-target="photos">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </button>
+            <button onclick="switchTab('messages')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-gray-500 hover:bg-white/40" data-target="messages">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
             </button>
         </div>
     </div>
@@ -191,11 +220,11 @@
     <!-- Modal: Drink Detail -->
     <div id="orderModal" class="fixed inset-0 z-[65] hidden">
         <div class="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity close-modal"></div>
-        <div class="absolute bottom-0 inset-x-0 h-[85vh] bg-white rounded-t-[40px] shadow-2xl overflow-hidden flex flex-col transition-transform duration-300 transform translate-y-full popup-content">
+        <div class="absolute bottom-0 inset-x-0 bg-white rounded-t-[40px] shadow-2xl overflow-hidden flex flex-col transition-transform duration-300 transform translate-y-full popup-content max-h-[85vh]">
             <div class="w-full flex justify-center pt-4 pb-2 bg-white z-10 close-modal cursor-pointer">
                 <div class="w-12 h-1.5 rounded-full bg-gray-200"></div>
             </div>
-            <div class="overflow-y-auto flex-1 pb-10 no-scrollbar relative">
+            <div class="overflow-y-auto flex-1 pb-6 no-scrollbar relative">
                 <div class="relative h-64 w-full">
                     <img id="modalImg" src="" class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-white/90"></div>
@@ -203,8 +232,8 @@
                 <div class="px-8 -mt-10 relative z-10">
                     <span id="modalCat" class="inline-block px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold tracking-wider mb-3 border border-blue-100">COCKTAIL</span>
                     <h2 id="modalTitle" class="text-3xl font-bold text-gray-900 mb-4 leading-tight">Mojito</h2>
-                    <p id="modalDesc" class="text-gray-500 leading-relaxed mb-8">Refreshing mint and lime...</p>
-                    <div class="flex items-center justify-between mb-8 p-1 bg-gray-100 rounded-full w-40 mx-auto">
+                    
+                    <div class="flex items-center justify-between mb-4 p-1 bg-gray-100 rounded-full w-40 mx-auto">
                         <button id="mQtyMinus" class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 active:scale-90 transition">-</button>
                         <span id="modalQtyVal" class="font-bold text-xl text-gray-800">1</span>
                         <button id="mQtyPlus" class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-800 active:scale-90 transition">+</button>
@@ -236,8 +265,6 @@
                             <option value="">Select Table...</option>
                         </select>
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">▼</div>
-                    </div>
-                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <input type="text" id="guestName" placeholder="Your Name" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
                     <input type="text" id="guestNote" placeholder="Notes?" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
