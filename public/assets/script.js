@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoPreviewModal = document.getElementById('photoPreviewModal');
     const previewImage = document.getElementById('previewImage');
 
-    const imgUrl = (path) => path ? '../' + path : null;
+    const imgUrl = (path) => path ? (path.startsWith('http') ? path : '../' + path) : null;
     const FALLBACK_IMG = 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop';
 
     let selectedDrink = null;
