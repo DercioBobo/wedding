@@ -1,10 +1,10 @@
 <!-- index.php -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wedding Bar</title>
+    <title>Bar do Casamento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -83,9 +83,9 @@
             
             <header class="mb-6 flex justify-between items-end">
                 <div>
-                    <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Welcome</p>
+                    <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Bem-vindo</p>
                     <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                        The Wedding Bar
+                        O Bar do Casamento
                     </h1>
                 </div>
                 <div id="statusIndicator" class="hidden">
@@ -105,7 +105,7 @@
                     </div>
                     <input type="text" id="searchInput" 
                         class="block w-full pl-11 pr-4 py-4 glass-panel rounded-[24px] text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-iosBlue/50 transition-all shadow-sm"
-                        placeholder="Search cocktails...">
+                        placeholder="Pesquisar bebidas...">
                 </div>
             </div>
 
@@ -115,7 +115,7 @@
             </div>
 
             <div id="drinksGrid" class="grid grid-cols-2 gap-4 pb-10">
-                <div class="col-span-2 text-center py-10 text-gray-400">Loading menu...</div>
+                <div class="col-span-2 text-center py-10 text-gray-400">A carregar o menu...</div>
             </div>
             
         </div>
@@ -127,9 +127,9 @@
             
             <header class="mb-6 flex justify-between items-end">
                 <div>
-                    <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Gallery</p>
+                    <p class="text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Galeria</p>
                     <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-orange-500">
-                        Wedding Moments
+                        Momentos do Casamento
                     </h1>
                 </div>
                 <!-- Upload Button -->
@@ -143,7 +143,7 @@
             <div id="photosGrid" class="columns-2 gap-4 space-y-4">
                 <!-- JS Loaded -->
                 <div class="bg-white/50 rounded-2xl p-4 text-center break-inside-avoid">
-                    <p class="text-sm text-gray-500">Loading photos...</p>
+                    <p class="text-sm text-gray-500">A carregar fotos...</p>
                 </div>
             </div>
             
@@ -165,16 +165,16 @@
         
         <!-- Chat Container (Scrollable) -->
         <div id="guestMessagesList" class="flex-1 overflow-y-auto w-full max-w-md mx-auto px-5 space-y-4 pt-2 pb-4">
-             <div class="text-center text-gray-400 text-sm py-10">Loading chat...</div>
+             <div class="text-center text-gray-400 text-sm py-10">A carregar conversa...</div>
         </div>
 
         <!-- Input Area (Fixed at bottom of flex container) -->
         <div class="flex-none px-5 w-full max-w-md mx-auto">
             <div class="glass-card rounded-[24px] p-2 shadow-xl border border-white/60">
                 <form id="messageForm" class="flex flex-col gap-2 p-1">
-                    <input type="text" name="guest_name" id="chatName" placeholder="Your Name" class="w-full px-4 py-2 bg-white/50 rounded-xl border border-white/50 outline-none focus:ring-2 focus:ring-pink-400/30 transition text-sm font-bold text-gray-700 placeholder-gray-400">
+                    <input type="text" name="guest_name" id="chatName" placeholder="O Seu Nome" class="w-full px-4 py-2 bg-white/50 rounded-xl border border-white/50 outline-none focus:ring-2 focus:ring-pink-400/30 transition text-sm font-bold text-gray-700 placeholder-gray-400">
                     <div class="flex gap-2">
-                        <input type="text" name="message" id="chatInput" placeholder="Type a message..." class="flex-1 pl-4 py-3 bg-white/50 rounded-2xl border border-white/50 outline-none focus:ring-2 focus:ring-pink-400/30 transition font-medium text-gray-800 placeholder-gray-400" autocomplete="off">
+                        <input type="text" name="message" id="chatInput" placeholder="Escreva uma mensagem..." class="flex-1 pl-4 py-3 bg-white/50 rounded-2xl border border-white/50 outline-none focus:ring-2 focus:ring-pink-400/30 transition font-medium text-gray-800 placeholder-gray-400" autocomplete="off">
                         <button type="submit" id="sendMessageBtn" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold shadow-lg shadow-pink-200 active:scale-95 transition-transform disabled:opacity-50">
                             <svg class="w-5 h-5 translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                         </button>
@@ -203,18 +203,18 @@
     <div id="orderStatus" 
          class="fixed bottom-0 left-0 w-full glass-panel border-t border-white/50 rounded-t-[32px] p-6 pb-28 transform translate-y-[120%] transition-transform duration-500 z-50 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
         <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
-            <p id="statusMessage" class="text-lg font-bold text-gray-800">Mixing your drink...</p>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Estado</p>
+            <p id="statusMessage" class="text-lg font-bold text-gray-800">A preparar a sua bebida...</p>
         </div>
         <span id="statusBadge" class="px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200">
-            PENDING
+            PENDENTE
         </span>
     </div>
 
     <!-- Cart Button (Adjusted Position) -->
     <button id="openCartBtn" class="fixed bottom-28 right-5 z-40 hidden glass-panel bg-white/90 px-5 py-4 rounded-full flex flex-col items-center justify-center gap-1 shadow-xl border border-white active:scale-95 transition-all hover:shadow-glow w-16 h-16">
         <span id="cartCountBadge" class="flex items-center justify-center bg-iosBlue text-white text-xs font-bold h-6 w-6 rounded-full shadow-md">0</span>
-        <span class="text-[10px] font-bold text-iosBlue uppercase">Order</span>
+        <span class="text-[10px] font-bold text-iosBlue uppercase">Pedido</span>
     </button>
 
     <!-- Modal: Drink Detail -->
@@ -242,7 +242,7 @@
             </div>
             <div class="p-6 bg-white border-t border-gray-100">
                 <button id="addToCartBtn" class="w-full py-4 rounded-[20px] bg-black text-white font-bold text-lg shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2">
-                    Add to Order
+                    Adicionar ao Pedido
                 </button>
             </div>
         </div>
@@ -253,26 +253,26 @@
         <div class="absolute inset-0 bg-white/90 backdrop-blur-md transition-opacity"></div>
         <div class="absolute inset-0 flex flex-col p-6">
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold">Your Tray</h2>
+                <h2 class="text-3xl font-bold">O Seu Tabuleiro</h2>
                 <button class="close-modal w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">&times;</button>
             </div>
             <div id="cartItemsList" class="flex-1 overflow-y-auto space-y-4 overscroll-contain"></div>
             <div class="mt-auto pt-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Your Table</label>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">A Sua Mesa</label>
                     <div class="relative">
                         <select id="tableSelect" class="w-full p-4 bg-gray-50 rounded-2xl border-none text-lg font-medium appearance-none focus:ring-2 focus:ring-blue-500/20 outline-none">
-                            <option value="">Select Table...</option>
+                            <option value="">Seleccionar Mesa...</option>
                         </select>
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">▼</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="guestName" placeholder="Your Name" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
-                    <input type="text" id="guestNote" placeholder="Notes?" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
+                    <input type="text" id="guestName" placeholder="O Seu Nome" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
+                    <input type="text" id="guestNote" placeholder="Notas?" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
                 </div>
                 <button id="placeOrderBtn" class="w-full py-4 rounded-[20px] bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg shadow-lg active:scale-95 transition-transform">
-                    Confirm Order
+                    Confirmar Pedido
                 </button>
             </div>
         </div>
@@ -283,8 +283,8 @@
         <div class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity"></div>
         <div id="customAlertBox" class="bg-white/90 backdrop-blur-xl w-full max-w-[300px] rounded-2xl shadow-2xl relative z-10 transform scale-90 opacity-0 transition-all duration-200">
             <div class="p-6 text-center">
-                <h3 id="alertTitle" class="text-lg font-bold mb-2">Message</h3>
-                <p id="alertMessage" class="text-gray-600 text-[15px] leading-relaxed">Alert Content</p>
+                <h3 id="alertTitle" class="text-lg font-bold mb-2">Mensagem</h3>
+                <p id="alertMessage" class="text-gray-600 text-[15px] leading-relaxed">Conteúdo do Alerta</p>
             </div>
             <div class="border-t border-gray-300/50">
                 <button onclick="closeAlert()" class="w-full py-3 text-blue-600 font-bold text-lg active:bg-gray-100 rounded-b-2xl transition-colors">OK</button>
