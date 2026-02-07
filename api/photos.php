@@ -82,6 +82,10 @@ function processImage($sourcePath, $destPath, $maxDim = 1920, $quality = 80) {
     imagedestroy($image);
     imagedestroy($newImage);
 
+    if ($result) {
+        @chmod($destPath, 0644);
+    }
+
     return $result;
 }
 
@@ -130,6 +134,9 @@ if ($method === 'GET') {
                 exit;
             }
         }
+
+        // Ensure the file is readable by the web server
+        @chmod($dest, 0644);
 
         $stmt = $pdo->prepare("INSERT INTO photos (filename) VALUES (?)");
         $stmt->execute(['uploads/photos/' . $filename]);
