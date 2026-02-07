@@ -152,7 +152,7 @@
     
     <!-- PHOTO PREVIEW MODAL -->
     <div id="photoPreviewModal" class="fixed inset-0 z-[70] hidden bg-black/95 flex items-center justify-center p-4">
-        <button onclick="closePhotoPreview()" class="absolute top-6 right-6 text-white/50 hover:text-white w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-2xl">&times;</button>
+        <button onclick="closePhotoPreview()" class="absolute top-6 right-6 text-white/80 hover:text-white w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-2xl border border-white/20">&times;</button>
         <img id="previewImage" src="" class="max-w-full max-h-full rounded-lg shadow-2xl">
     </div>
 
@@ -285,6 +285,23 @@
             </div>
             <div class="border-t border-gray-300/50">
                 <button onclick="closeAlert()" class="w-full py-3 text-blue-600 font-bold text-lg active:bg-gray-100 rounded-b-2xl transition-colors">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPLOAD PROGRESS OVERLAY -->
+    <div id="uploadOverlay" class="fixed inset-0 z-[100] hidden items-center justify-center px-6">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div class="bg-white/90 backdrop-blur-xl w-full max-w-[300px] rounded-2xl shadow-2xl relative z-10 p-6">
+            <div class="text-center mb-4">
+                <div id="uploadIcon" class="w-14 h-14 mx-auto mb-3 rounded-full bg-blue-50 flex items-center justify-center">
+                    <svg class="w-7 h-7 text-blue-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                </div>
+                <h3 id="uploadTitle" class="text-lg font-bold text-gray-800">A carregar foto...</h3>
+                <p id="uploadPercent" class="text-2xl font-bold text-blue-600 mt-1">0%</p>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div id="uploadBar" class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
             </div>
         </div>
     </div>

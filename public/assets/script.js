@@ -267,24 +267,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- PHOTO LOGIC ---
     const photoInput = document.getElementById('photoUpload');
+    const uploadOverlay = document.getElementById('uploadOverlay');
+    const uploadBar = document.getElementById('uploadBar');
+    const uploadPercent = document.getElementById('uploadPercent');
+    const uploadTitle = document.getElementById('uploadTitle');
+    const uploadIcon = document.getElementById('uploadIcon');
+
+    function showUploadProgress() {
+        uploadBar.style.width = '0%';
+        uploadPercent.textContent = '0%';
+        uploadTitle.textContent = 'A carregar foto...';
+        uploadIcon.innerHTML = '<svg class="w-7 h-7 text-blue-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>';
+        uploadOverlay.classList.remove('hidden');
+        uploadOverlay.classList.add('flex');
+    }
+
+    function hideUploadProgress() {
+        setTimeout(() => {
+            uploadOverlay.classList.add('hidden');
+            uploadOverlay.classList.remove('flex');
+        }, 800);
+    }
+
     if (photoInput) {
-        photoInput.addEventListener('change', async (e) => {
+        photoInput.addEventListener('change', (e) => {
             if (e.target.files.length === 0) return;
             const file = e.target.files[0];
             const formData = new FormData();
             formData.append('photo', file);
 
-            showAlert("A carregar foto...", "Por Favor Aguarde");
+            showUploadProgress();
 
-            try {
-                const res = await fetch('../api/photos.php', { method: 'POST', body: formData });
-                if (res.ok) {
-                    showAlert("Foto adicionada à galeria!", "Sucesso");
-                    fetchPhotos();
-                } else {
-                    showAlert("Falha ao carregar.", "Erro");
+            const xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', (ev) => {
+                if (ev.lengthComputable) {
+                    const pct = Math.round((ev.loaded / ev.total) * 100);
+                    uploadBar.style.width = pct + '%';
+                    uploadPercent.textContent = pct + '%';
                 }
-            } catch (e) { showAlert("Erro ao carregar.", "Erro"); }
+            });
+
+            xhr.addEventListener('load', () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    uploadBar.style.width = '100%';
+                    uploadPercent.textContent = '100%';
+                    uploadTitle.textContent = 'Foto adicionada!';
+                    uploadIcon.innerHTML = '<svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                    fetchPhotos();
+                    if (window.confetti) {
+                        confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 }, colors: ['#FFC0CB', '#FF69B4', '#a855f7'] });
+                    }
+                } else {
+                    uploadTitle.textContent = 'Falha ao carregar.';
+                    uploadIcon.innerHTML = '<svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                }
+                hideUploadProgress();
+                photoInput.value = '';
+            });
+
+            xhr.addEventListener('error', () => {
+                uploadTitle.textContent = 'Erro ao carregar.';
+                uploadIcon.innerHTML = '<svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                hideUploadProgress();
+                photoInput.value = '';
+            });
+
+            xhr.open('POST', '../api/photos.php');
+            xhr.send(formData);
         });
     }
 
