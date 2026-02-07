@@ -43,6 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
     checkActiveOrder();
     setInterval(checkActiveOrder, 5000);
 
+    // Load saved settings
+    setTimeout(loadUserSettings, 1000); // Delay slightly to ensure tables are loaded
+
+    function loadUserSettings() {
+        const savedTable = localStorage.getItem('wedding_table_id');
+        const savedName = localStorage.getItem('wedding_guest_name');
+
+        if (savedTable && tableSelect) {
+            tableSelect.value = savedTable;
+            // Lock it
+            if (tableSelect.value === savedTable) { // Verify it exists in options
+                tableSelect.disabled = true;
+                tableSelect.classList.add('bg-gray-100', 'text-gray-500');
+            }
+        }
+
+        if (savedName) {
+            const nameInput = document.getElementById('guestName');
+            const chatName = document.getElementById('chatName');
+
+            if (nameInput) {
+                nameInput.value = savedName;
+                nameInput.readOnly = true;
+                nameInput.classList.add('bg-gray-100', 'text-gray-500');
+            }
+            if (chatName) {
+                chatName.value = savedName;
+                chatName.readOnly = true;
+                chatName.classList.add('bg-gray-100', 'text-gray-500');
+            }
+        }
+    }
+
     // --- Listeners ---
     if (searchInput) searchInput.addEventListener('input', (e) => filterDrinks(e.target.value));
 
@@ -493,7 +526,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cartItemsList.innerHTML = cart.map(item => `
             <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl">
-                <img src="${item.image ? '../public/' + item.image : 'assets/placeholder.jpg'}" class="w-16 h-16 rounded-xl object-cover">
+                <img src="${item.image ? '../public/' + item.image : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'}" 
+                     class="w-16 h-16 rounded-xl object-cover"
+                     onerror="this.src='https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'">
+
                 <div class="flex-1">
                     <h4 class="font-bold text-gray-900">${item.name}</h4>
                     <span class="text-sm text-gray-500">Qty: ${item.quantity}</span>
@@ -533,6 +569,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (res.ok) {
+                // SAVE USER SETTINGS
+                localStorage.setItem('wedding_table_id', tableId);
+                localStorage.setItem('wedding_guest_name', guestName);
+                loadUserSettings(); // Lock fields immediately
+
                 cart = [];
                 updateCartUI();
                 checkoutModal.classList.add('hidden');
@@ -573,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 const active = data.find(o => ['pending', 'ready'].includes(o.status));
                 if (active) {
-                    statusBar.classList.remove('translate-y-full');
+                    statusBar.classList.remove('translate-y-[120%]');
                     statusBar.classList.add('translate-y-0');
 
                     if (active.status === 'ready') {
@@ -589,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         statusBar.classList.remove('shadow-[0_0_30px_rgba(34,197,94,0.3)]', 'border-green-200');
                     }
                 } else {
-                    statusBar.classList.add('translate-y-full');
+                    statusBar.classList.add('translate-y-[120%]');
                     statusBar.classList.remove('translate-y-0');
                 }
             }

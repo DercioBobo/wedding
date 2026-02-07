@@ -28,7 +28,7 @@ switch ($method) {
         
         $image_url = null;
         
-        // Handle Image Upload
+        // Handle Image Upload or Link
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = '../public/uploads/';
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -36,6 +36,8 @@ switch ($method) {
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename)) {
                 $image_url = 'uploads/' . $filename;
             }
+        } elseif (!empty($input['image_link'])) {
+             $image_url = $input['image_link'];
         }
         
         if ($editId) {

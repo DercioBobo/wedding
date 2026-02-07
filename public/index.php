@@ -201,7 +201,7 @@
     
     <!-- Status Bar for Drinks (Adjusted z-index and position) -->
     <div id="orderStatus" 
-         class="fixed bottom-0 left-0 w-full glass-panel border-t border-white/50 rounded-t-[32px] p-6 pb-28 transform translate-y-full transition-transform duration-500 z-50 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+         class="fixed bottom-0 left-0 w-full glass-panel border-t border-white/50 rounded-t-[32px] p-6 pb-28 transform translate-y-[120%] transition-transform duration-500 z-50 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
         <div>
             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
             <p id="statusMessage" class="text-lg font-bold text-gray-800">Mixing your drink...</p>
@@ -256,7 +256,7 @@
                 <h2 class="text-3xl font-bold">Your Tray</h2>
                 <button class="close-modal w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">&times;</button>
             </div>
-            <div id="cartItemsList" class="flex-1 overflow-y-auto space-y-4"></div>
+            <div id="cartItemsList" class="flex-1 overflow-y-auto space-y-4 overscroll-contain"></div>
             <div class="mt-auto pt-6 space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Your Table</label>
@@ -265,6 +265,8 @@
                             <option value="">Select Table...</option>
                         </select>
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">▼</div>
+                    </div>
+                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <input type="text" id="guestName" placeholder="Your Name" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">
                     <input type="text" id="guestNote" placeholder="Notes?" class="p-4 bg-gray-50 rounded-2xl border-none outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition">

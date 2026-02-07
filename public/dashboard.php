@@ -71,7 +71,9 @@
                         📷 Upload Image
                         <input type="file" name="image" class="hidden">
                     </label>
-                    <div class="flex-1"></div>
+                    <div class="flex-1">
+                        <input name="image_link" id="drinkImageLink" placeholder="Or Paste Image Link..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-100/50 text-sm font-medium transition">
+                    </div>
                     <button type="button" onclick="resetForm()" class="text-slate-400 hover:text-slate-600 font-bold px-4">Cancel</button>
                     <button type="submit" id="saveDrinkBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-blue-200">Save Drink</button>
                 </div>

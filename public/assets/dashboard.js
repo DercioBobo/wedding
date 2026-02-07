@@ -138,6 +138,13 @@ window.editDrink = (id) => {
     document.getElementById('drinkCat').value = d.category;
     document.getElementById('drinkDesc').value = d.description;
 
+    // Check if image is a URL (starts with http) or local path
+    if (d.image_url && d.image_url.startsWith('http')) {
+        document.getElementById('drinkImageLink').value = d.image_url;
+    } else {
+        document.getElementById('drinkImageLink').value = '';
+    }
+
     document.getElementById('formTitle').textContent = "Edit " + d.name;
     document.getElementById('saveDrinkBtn').textContent = "Update Drink";
     document.getElementById('saveDrinkBtn').classList.add('bg-indigo-600');
@@ -147,6 +154,9 @@ window.editDrink = (id) => {
 window.resetForm = () => {
     document.getElementById('drinkForm').reset();
     document.getElementById('drinkId').value = '';
+    // Also clear hidden/custom inputs if any, though form.reset handles most.
+    if (document.getElementById('drinkImageLink')) document.getElementById('drinkImageLink').value = '';
+
     document.getElementById('formTitle').textContent = "Add New Drink";
     document.getElementById('saveDrinkBtn').textContent = "Save Drink";
     document.getElementById('saveDrinkBtn').classList.remove('bg-indigo-600');
