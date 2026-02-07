@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // State
     let allDrinks = [];
     let cart = [];
-    let activeCategory = 'All';
+    let activeCategory = 'Todos';
 
     // Elements
     const drinksGrid = document.getElementById('drinksGrid');
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Validate Name
             if (!nameInput.value.trim()) {
-                showAlert("Please enter your name.", "Name Required");
+                showAlert("Por favor, introduza o seu nome.", "Nome Obrigatório");
                 nameInput.focus();
                 return;
             }
@@ -223,13 +223,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalContent = btn.innerHTML;
 
             btn.disabled = true;
-            btn.textContent = "Sending...";
+            btn.textContent = "A enviar...";
 
             const formData = new FormData(messageForm);
             const data = Object.fromEntries(formData.entries());
 
             if (!data.message.trim()) { // This check might be redundant due to msgInput validation above
-                showAlert("Please write a message first.", "Empty Message");
+                showAlert("Por favor, escreva uma mensagem primeiro.", "Mensagem Vazia");
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
                 return;
@@ -250,10 +250,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 }, colors: ['#FFC0CB', '#FF69B4'] });
                     }
                 } else {
-                    showAlert("Failed to send message.", "Error");
+                    showAlert("Falha ao enviar mensagem.", "Erro");
                 }
             } catch (err) {
-                showAlert("Network error.", "Error");
+                showAlert("Erro de rede.", "Erro");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
@@ -271,17 +271,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('photo', file);
 
-            showAlert("Uploading photo...", "Please Wait");
+            showAlert("A carregar foto...", "Por Favor Aguarde");
 
             try {
                 const res = await fetch('../api/photos.php', { method: 'POST', body: formData });
                 if (res.ok) {
-                    showAlert("Photo added to gallery!", "Success");
+                    showAlert("Foto adicionada à galeria!", "Sucesso");
                     fetchPhotos();
                 } else {
-                    showAlert("Upload failed.", "Error");
+                    showAlert("Falha ao carregar.", "Erro");
                 }
-            } catch (e) { showAlert("Error uploading.", "Error"); }
+            } catch (e) { showAlert("Erro ao carregar.", "Erro"); }
         });
     }
 
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const chatMsgs = msgs.slice().reverse();
 
             if (chatMsgs.length === 0) {
-                guestMessagesList.innerHTML = '<div class="text-center text-gray-400 text-sm py-10">No messages yet. Start the conversation!</div>';
+                guestMessagesList.innerHTML = '<div class="text-center text-gray-400 text-sm py-10">Ainda não há mensagens. Comece a conversa!</div>';
                 lastMessageCount = 0;
                 return;
             }
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const photos = await res.json();
 
             if (photos.length === 0) {
-                grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-400 font-medium">No photos yet. Be the first!</div>';
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-400 font-medium">Ainda não há fotos. Seja o primeiro!</div>';
                 return;
             }
 
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
 
         } catch (e) {
-            grid.innerHTML = '<div class="text-center text-red-500">Failed to load photos</div>';
+            grid.innerHTML = '<div class="text-center text-red-500">Falha ao carregar fotos</div>';
         }
     }
 
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('../api/tables.php');
             const tables = await res.json();
-            tableSelect.innerHTML = '<option value="">Select Table...</option>' + tables.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            tableSelect.innerHTML = '<option value="">Seleccionar Mesa...</option>' + tables.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
         } catch (e) { }
     }
 
@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('categoryFilters');
         if (!container) return;
 
-        const categories = ['All', ...new Set(drinks.filter(d => d.is_active == 1).map(d => d.category))].filter(Boolean);
+        const categories = ['Todos', ...new Set(drinks.filter(d => d.is_active == 1).map(d => d.category))].filter(Boolean);
 
         container.innerHTML = categories.map(cat => `
             <button onclick="setCategory('${cat}')" 
@@ -424,8 +424,8 @@ document.addEventListener('DOMContentLoaded', () => {
             drinksGrid.innerHTML = `
                 <div class="col-span-2 flex flex-col items-center justify-center py-20 text-center">
                     <div class="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-3xl mb-4">🍹</div>
-                    <p class="text-gray-500 font-medium">No drinks found.</p>
-                    <p class="text-xs text-gray-400 mt-1">Try a different category or search term.</p>
+                    <p class="text-gray-500 font-medium">Nenhuma bebida encontrada.</p>
+                    <p class="text-xs text-gray-400 mt-1">Tente outra categoria ou termo de pesquisa.</p>
                 </div>
             `;
             return;
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let filtered = allDrinks.filter(d => d.is_active == 1);
 
         // Filter by Category
-        if (activeCategory !== 'All') {
+        if (activeCategory !== 'Todos') {
             filtered = filtered.filter(d => d.category === activeCategory);
         }
 
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedQty = existing ? existing.quantity : 1;
         modalQtyVal.textContent = selectedQty;
 
-        addToCartBtn.textContent = existing ? "Update Tray" : "Add to Tray";
+        addToCartBtn.textContent = existing ? "Actualizar Tabuleiro" : "Adicionar ao Tabuleiro";
 
         modal.classList.remove('hidden');
         setTimeout(() => {
@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cart[existingIndex].quantity = qty;
         } else {
             if (cart.length >= 2) {
-                showAlert("Tray Full: Max 2 types of drinks allowed.");
+                showAlert("Tabuleiro Cheio: Máximo 2 tipos de bebidas permitidos.");
                 return;
             }
             cart.push({
@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="flex-1">
                     <h4 class="font-bold text-gray-900">${item.name}</h4>
-                    <span class="text-sm text-gray-500">Qty: ${item.quantity}</span>
+                    <span class="text-sm text-gray-500">Qtd: ${item.quantity}</span>
                 </div>
                 <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 p-2">✕</button>
             </div>
@@ -549,12 +549,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const guestNote = document.getElementById('guestNote').value;
 
         if (!tableId || cart.length === 0) {
-            showAlert("Please select a table.");
+            showAlert("Por favor, seleccione uma mesa.");
             return;
         }
 
         placeOrderBtn.disabled = true;
-        placeOrderBtn.textContent = "Sending...";
+        placeOrderBtn.textContent = "A enviar...";
 
         try {
             const res = await fetch('../api/orders.php', {
@@ -578,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateCartUI();
                 checkoutModal.classList.add('hidden');
                 checkActiveOrder();
-                showAlert("Order Placed Successfully!");
+                showAlert("Pedido Realizado com Sucesso!");
 
                 // CONFETTI BURST
                 if (window.confetti) {
@@ -590,18 +590,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else {
                 const d = await res.json();
-                showAlert(d.error || "Error", "Oops");
+                showAlert(d.error || "Erro", "Ops");
             }
-        } catch (e) { showAlert("Error connecting", "Network Error"); }
+        } catch (e) { showAlert("Erro de conexão", "Erro de Rede"); }
         finally {
             placeOrderBtn.disabled = false;
-            placeOrderBtn.textContent = "Confirm Order";
+            placeOrderBtn.textContent = "Confirmar Pedido";
         }
     }
 
     function isBlocked() {
         if (statusBar.classList.contains('translate-y-0') && statusBadge.textContent !== "DONE") {
-            showAlert("You already have an active order. Please wait for it to be completed.", "Order In Progress");
+            showAlert("Já tem um pedido activo. Por favor, aguarde que seja concluído.", "Pedido em Curso");
             return true;
         }
         return false;
@@ -618,14 +618,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusBar.classList.add('translate-y-0');
 
                     if (active.status === 'ready') {
-                        statusMessage.textContent = "Your drink is ready!";
-                        statusBadge.textContent = "READY";
+                        statusMessage.textContent = "A sua bebida está pronta!";
+                        statusBadge.textContent = "PRONTO";
                         statusBadge.className = "px-4 py-2 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200 animate-pulse";
                         // Pulsing global container
                         statusBar.classList.add('shadow-[0_0_30px_rgba(34,197,94,0.3)]', 'border-green-200');
                     } else {
-                        statusMessage.textContent = "Mixing your drink...";
-                        statusBadge.textContent = "PENDING";
+                        statusMessage.textContent = "A preparar a sua bebida...";
+                        statusBadge.textContent = "PENDENTE";
                         statusBadge.className = "px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200";
                         statusBar.classList.remove('shadow-[0_0_30px_rgba(34,197,94,0.3)]', 'border-green-200');
                     }
@@ -638,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Custom Alert Logic
-    window.showAlert = (msg, title = "Notice") => {
+    window.showAlert = (msg, title = "Aviso") => {
         const overlay = document.getElementById('customAlert');
         const box = document.getElementById('customAlertBox');
 
