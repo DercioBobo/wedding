@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoPreviewModal = document.getElementById('photoPreviewModal');
     const previewImage = document.getElementById('previewImage');
 
+    // Helper: resolve image URL through PHP (bypasses static file restrictions on server)
+    const imgUrl = (path) => path ? '../api/image.php?f=' + encodeURIComponent(path) : null;
+    const FALLBACK_IMG = 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop';
+
     let selectedDrink = null;
     let selectedQty = 1;
 
@@ -341,8 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             grid.innerHTML = photos.map(p => `
-                <div class="break-inside-avoid mb-4 rounded-xl overflow-hidden cursor-pointer group relative shadow-md" onclick="openPhotoPreview('../public/${p.filename}')">
-                    <img src="../public/${p.filename}" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105" loading="lazy">
+                <div class="break-inside-avoid mb-4 rounded-xl overflow-hidden cursor-pointer group relative shadow-md" onclick="openPhotoPreview('${imgUrl(p.filename)}')">
+                    <img src="${imgUrl(p.filename)}" class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105" loading="lazy">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
                 </div>
             `).join('');
@@ -436,9 +440,9 @@ document.addEventListener('DOMContentLoaded', () => {
                  style="animation-delay: ${index * 50}ms; animation-fill-mode: both;"
                  onclick="openDrinkModal(${d.id})">
                 <div class="aspect-[3/4] bg-gray-100 relative">
-                    <img src="${d.image_url ? '../public/' + d.image_url : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'}" 
-                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                         onerror="this.src='https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'">
+                    <img src="${d.image_url ? imgUrl(d.image_url) : FALLBACK_IMG}"
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                         onerror="this.src='${FALLBACK_IMG}'">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
                 </div>
                 <div class="absolute bottom-0 left-0 right-0 p-4">
@@ -472,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDrink = allDrinks.find(d => d.id == id);
         if (!selectedDrink) return;
 
-        modalImg.src = selectedDrink.image_url ? '../public/' + selectedDrink.image_url : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop';
+        modalImg.src = selectedDrink.image_url ? imgUrl(selectedDrink.image_url) : FALLBACK_IMG;
         modalTitle.textContent = selectedDrink.name;
         // modalDesc removed as per request
         if (modalCat) modalCat.textContent = selectedDrink.category.toUpperCase();
@@ -526,9 +530,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cartItemsList.innerHTML = cart.map(item => `
             <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl">
-                <img src="${item.image ? '../public/' + item.image : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'}" 
+                <img src="${item.image ? imgUrl(item.image) : FALLBACK_IMG}"
                      class="w-16 h-16 rounded-xl object-cover"
-                     onerror="this.src='https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'">
+                     onerror="this.src='${FALLBACK_IMG}'">
 
                 <div class="flex-1">
                     <h4 class="font-bold text-gray-900">${item.name}</h4>

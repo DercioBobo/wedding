@@ -3,6 +3,9 @@
 let allOrders = [];
 let allDrinks = [];
 let allTables = [];
+
+const imgUrl = (path) => path ? '../api/image.php?f=' + encodeURIComponent(path) : null;
+const FALLBACK_IMG = 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop';
 let allPhotos = [];
 let selectedPhotos = new Set();
 let pendingDeleteIds = [];
@@ -102,9 +105,9 @@ function renderMenu() {
     const list = document.getElementById('menuList');
     list.innerHTML = allDrinks.map(d => `
         <div class="bg-white p-3 rounded-2xl flex items-center gap-4 group border border-slate-100 shadow-sm hover:shadow-md transition">
-            <img src="${d.image_url ? '../public/' + d.image_url : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'}" 
-                 class="w-14 h-14 rounded-xl object-cover bg-slate-100" 
-                 onerror="this.src='https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'">
+            <img src="${d.image_url ? imgUrl(d.image_url) : FALLBACK_IMG}"
+                 class="w-14 h-14 rounded-xl object-cover bg-slate-100"
+                 onerror="this.src='${FALLBACK_IMG}'">
             <div class="flex-1">
                 <div class="font-bold text-slate-700 flex items-center gap-2 text-lg">
                     ${d.name}
@@ -223,7 +226,7 @@ function loadDashPhotos() {
             const isSel = selectedPhotos.has(p.id);
             return `
             <div class="relative group rounded-xl overflow-hidden bg-white shadow-sm border ${isSel ? 'border-blue-500 ring-2 ring-blue-500' : 'border-slate-100'} cursor-pointer" onclick="togglePhotoSelect(${p.id})">
-                <img src="../public/${p.filename}" class="w-full h-40 object-cover">
+                <img src="${imgUrl(p.filename)}" class="w-full h-40 object-cover">
                 
                 <div class="absolute top-2 left-2">
                     <div class="w-6 h-6 rounded-full border-2 ${isSel ? 'bg-blue-500 border-blue-500' : 'bg-black/30 border-white'} flex items-center justify-center transition">
@@ -273,7 +276,7 @@ window.downloadSelected = () => {
         const p = allPhotos.find(i => i.id == id);
         if (p) {
             const a = document.createElement('a');
-            a.href = '../public/' + p.filename;
+            a.href = imgUrl(p.filename);
             a.download = p.filename.split('/').pop();
             document.body.appendChild(a);
             a.click();
