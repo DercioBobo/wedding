@@ -304,7 +304,7 @@ window.closePinModal = () => {
 
 window.confirmPin = () => {
     const pin = document.getElementById('pinInput').value;
-    if (pin === '1234') { // HARDCODED for now
+    if (pin === '2626') {
         closePinModal();
         performDelete();
     } else {
@@ -316,6 +316,7 @@ async function performDelete() {
     for (const id of pendingDeleteIds) {
         await fetch('../api/photos.php', {
             method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id })
         });
     }
