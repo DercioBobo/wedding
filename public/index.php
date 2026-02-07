@@ -78,7 +78,7 @@
     <div class="orb orb-2 animate-pulse" style="animation-delay: 2s"></div>
 
     <!-- Tab Content Container -->
-    <div id="tab-drinks" class="tab-content block">
+    <div id="tab-drinks" class="tab-content hidden">
         <div class="max-w-md mx-auto min-h-screen flex flex-col pt-6 px-5 pb-32">
             
             <header class="mb-6 flex justify-between items-end">
@@ -122,7 +122,7 @@
     </div>
 
     <!-- PHOTOS TAB -->
-    <div id="tab-photos" class="tab-content hidden">
+    <div id="tab-photos" class="tab-content block">
         <div class="max-w-md mx-auto min-h-screen flex flex-col pt-6 px-5 pb-32">
             
             <header class="mb-6 flex justify-between items-end">
@@ -187,10 +187,7 @@
     <!-- BOTTOM TAB BAR -->
     <div class="fixed bottom-6 left-5 right-5 z-[60]">
         <div class="glass-panel mx-auto max-w-sm rounded-[32px] p-2 flex justify-between shadow-2xl border border-white/60">
-            <button onclick="switchTab('drinks')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-white bg-blue-600 shadow-lg" data-target="drinks">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-            </button>
-            <button onclick="switchTab('photos')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-gray-500 hover:bg-white/40" data-target="photos">
+            <button onclick="switchTab('photos')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-white bg-blue-600 shadow-lg" data-target="photos">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             </button>
             <button onclick="switchTab('messages')" class="tab-btn flex-1 py-3 rounded-[24px] flex items-center justify-center gap-2 font-bold transition-all text-gray-500 hover:bg-white/40" data-target="messages">

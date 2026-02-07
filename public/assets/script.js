@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedQty = 1;
 
     // --- Init ---
-    renderSkeletons(); // Show skeletons immediately
+    fetchPhotos(); // Photos is the default tab
     fetchDrinks();
     fetchTables();
     checkActiveOrder();
