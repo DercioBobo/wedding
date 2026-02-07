@@ -1,18 +1,26 @@
 <?php
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Ensure upload dir exists
-$uploadDir = '../public/uploads/photos/';
+// Use absolute paths based on this file's location
+$baseDir = realpath(__DIR__ . '/..') ?: dirname(__DIR__);
+$uploadDir = $baseDir . '/public/uploads/photos/';
+
 if (!file_exists($uploadDir)) {
     if (!@mkdir($uploadDir, 0755, true)) {
         http_response_code(500);
-        echo json_encode(['error' => 'Cannot create upload directory']);
+        echo json_encode(['error' => 'Cannot create upload directory', 'path' => $uploadDir]);
         exit;
     }
+}
+
+if (!is_writable($uploadDir)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Upload directory is not writable', 'path' => $uploadDir]);
+    exit;
 }
 
 /**
@@ -143,7 +151,7 @@ if ($method === 'GET') {
     $photo = $stmt->fetch();
 
     if ($photo) {
-        $filepath = '../public/' . $photo['filename'];
+        $filepath = $baseDir . '/public/' . $photo['filename'];
         if (file_exists($filepath)) {
             unlink($filepath);
         }

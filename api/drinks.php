@@ -1,7 +1,7 @@
 <?php
 // api/drinks.php
 header('Content-Type: application/json');
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -30,8 +30,8 @@ switch ($method) {
         
         // Handle Image Upload or Link
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../public/uploads/';
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            $uploadDir = __DIR__ . '/../public/uploads/';
+            if (!is_dir($uploadDir)) @mkdir($uploadDir, 0755, true);
             $filename = uniqid() . '_' . basename($_FILES['image']['name']);
             if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename)) {
                 $image_url = 'uploads/' . $filename;
