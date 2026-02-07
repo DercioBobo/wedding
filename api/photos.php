@@ -8,21 +8,43 @@ $method = $_SERVER['REQUEST_METHOD'];
 // Ensure upload dir exists
 $uploadDir = '../public/uploads/photos/';
 if (!file_exists($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
+    if (!@mkdir($uploadDir, 0755, true)) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Cannot create upload directory']);
+        exit;
+    }
 }
 
 /**
  * Compress and Resize Image
  */
 function processImage($sourcePath, $destPath, $maxDim = 1920, $quality = 80) {
-    list($width, $height, $type) = getimagesize($sourcePath);
-    
+    if (!function_exists('imagecreatefromjpeg')) {
+        return false; // GD not available
+    }
+
+    $info = getimagesize($sourcePath);
+    if ($info === false) {
+        return false; // Unreadable image
+    }
+
+    list($width, $height, $type) = $info;
+
+    if ($width === 0 || $height === 0) {
+        return false;
+    }
+
     // Load Image
+    $image = null;
     switch ($type) {
-        case IMAGETYPE_JPEG: $image = imagecreatefromjpeg($sourcePath); break;
-        case IMAGETYPE_PNG:  $image = imagecreatefrompng($sourcePath); break;
-        case IMAGETYPE_WEBP: $image = imagecreatefromwebp($sourcePath); break;
+        case IMAGETYPE_JPEG: $image = @imagecreatefromjpeg($sourcePath); break;
+        case IMAGETYPE_PNG:  $image = @imagecreatefrompng($sourcePath); break;
+        case IMAGETYPE_WEBP: $image = @imagecreatefromwebp($sourcePath); break;
         default: return false;
+    }
+
+    if (!$image) {
+        return false;
     }
 
     // Calculate new dimensions
@@ -30,36 +52,25 @@ function processImage($sourcePath, $destPath, $maxDim = 1920, $quality = 80) {
     if ($width > $maxDim || $height > $maxDim) {
         if ($width > $height) {
             $newWidth = $maxDim;
-            $newHeight = $maxDim / $ratio;
+            $newHeight = (int)($maxDim / $ratio);
         } else {
             $newHeight = $maxDim;
-            $newWidth = $maxDim * $ratio;
+            $newWidth = (int)($maxDim * $ratio);
         }
     } else {
         $newWidth = $width;
         $newHeight = $height;
     }
 
-    // Create new image
     $newImage = imagecreatetruecolor($newWidth, $newHeight);
 
-    // Handle Transparency (for PNG/WEBP being saved as JPEG, we fill white, or keep transparency if saving as same)
-    // For this gallery, we'll standardize on keeping mostly original look but compressing. 
-    // Since we output as JPEG for max compression usually, let's handle alpha.
-    // Actually, usually easier to save as JPEG to ensure small size for photos.
-    
-    // Fill white background for transparency (good for photos)
     $white = imagecolorallocate($newImage, 255, 255, 255);
     imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $white);
 
-    // Resize
     imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
-    // Save as JPEG with compression
-    // We intentionally change extension to .jpg in the main logic to match this
     $result = imagejpeg($newImage, $destPath, $quality);
 
-    // Cleanup
     imagedestroy($image);
     imagedestroy($newImage);
 
@@ -92,26 +103,29 @@ if ($method === 'GET') {
              exit;
         }
 
-        // Generate new filename (always jpg for consistency & ease of compression)
-        $filename = uniqid('photo_') . '.jpg';
+        // For HEIC or when GD is missing, keep original extension
+        $useOriginalExt = ($ext === 'heic' || !function_exists('imagecreatefromjpeg'));
+        $saveExt = $useOriginalExt ? $ext : 'jpg';
+        $filename = uniqid('photo_') . '.' . $saveExt;
         $dest = $uploadDir . $filename;
 
-        // Process Image
-        if (processImage($file['tmp_name'], $dest)) {
-            $stmt = $pdo->prepare("INSERT INTO photos (filename) VALUES (?)");
-            $stmt->execute(['uploads/photos/' . $filename]);
-            echo json_encode(['success' => true]);
-        } else {
-            // Fallback: move original if processing fails (e.g. GD missing)
-             if (move_uploaded_file($file['tmp_name'], $dest)) {
-                $stmt = $pdo->prepare("INSERT INTO photos (filename) VALUES (?)");
-                $stmt->execute(['uploads/photos/' . $filename]);
-                echo json_encode(['success' => true, 'warning' => 'Compression failed, saved original']);
-             } else {
+        $processed = false;
+        if (!$useOriginalExt) {
+            $processed = processImage($file['tmp_name'], $dest);
+        }
+
+        if (!$processed) {
+            // Fallback: save original file as-is
+            if (!move_uploaded_file($file['tmp_name'], $dest)) {
                 http_response_code(500);
                 echo json_encode(['error' => 'Failed to save file']);
-             }
+                exit;
+            }
         }
+
+        $stmt = $pdo->prepare("INSERT INTO photos (filename) VALUES (?)");
+        $stmt->execute(['uploads/photos/' . $filename]);
+        echo json_encode(['success' => true]);
         exit;
     }
     
